@@ -85,14 +85,12 @@ export default function Home() {
 
         {/* Call to Action */}
         <div className="w-full max-w-md mt-14 mb-8">
-          <Button 
-            asChild
-            className="w-full h-auto text-lg sm:text-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-bold py-5 sm:py-6 rounded-full shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all transform hover:scale-105 border-0"
+          <Link 
+            href="/inscricao"
+            className="inline-block w-full text-center text-lg sm:text-xl bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white font-bold py-5 sm:py-6 rounded-full shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all transform hover:scale-105 border-0"
           >
-            <Link href="/inscricao">
-              Inscrever-se Grátis
-            </Link>
-          </Button>
+            Inscrever-se Grátis
+          </Link>
         </div>
         
       </div>
