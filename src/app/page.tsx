@@ -1,209 +1,268 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Calendar, Clock, MapPin, Ticket } from "lucide-react";
+import Countdown from "@/components/Countdown";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col">
+    <main className="min-h-screen bg-black text-white flex flex-col" style={{ fontFamily: "var(--font-inter)" }}>
 
-      {/* ── HERO ── */}
-      <section className="relative w-full min-h-screen flex flex-col items-center justify-start overflow-hidden">
+      {/* ══════════════════════════════
+          HERO
+      ══════════════════════════════ */}
+      <section className="relative w-full flex flex-col items-center overflow-hidden" style={{ minHeight: "100svh" }}>
 
-        {/* Foto de fundo */}
+        {/* ── Foto de fundo — sem blur ── */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/fotomaisfundopreto.jpg"
-            alt="Fundo do evento"
+            alt="Pastor Alan e Pastora Graciele Daniel"
             fill
             className="object-cover object-top"
             priority
+            quality={100}
           />
-          {/* Gradiente sobre a foto para legibilidade */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/20 to-black/90" />
+          {/* Gradiente suave apenas na parte inferior */}
+          <div className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,0.98) 100%)",
+            }}
+          />
         </div>
 
-        {/* Conteúdo Hero */}
-        <div className="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center px-4 pt-10 pb-16 text-center">
+        {/* ── Conteúdo posicionado na metade inferior ── */}
+        <div className="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center px-5"
+          style={{ paddingTop: "52svh" }}>
 
-          {/* Badge da Igreja */}
-          <div className="mb-6 inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/20 bg-black/40 backdrop-blur-sm">
-            <span className="text-xs font-medium text-gray-200 tracking-wider uppercase">
-              Igreja Hope · Rede de Casais
-            </span>
-          </div>
-
-          {/* Logo do título (PNG com transparência) */}
-          <div className="w-[80%] max-w-sm mx-auto mb-6 drop-shadow-[0_0_30px_rgba(168,85,247,0.6)]">
+          {/* Logo do evento — sem efeitos, só a imagem limpa */}
+          <div className="w-[75%] max-w-[300px] mx-auto mb-5">
             <Image
               src="/logodotitulo.png"
               alt="Conferência de Casais 2026"
-              width={480}
-              height={240}
+              width={420}
+              height={210}
               className="w-full h-auto object-contain"
               priority
             />
           </div>
 
-          {/* Subtítulo / Tema */}
-          <p className="text-sm sm:text-base text-gray-200 font-light leading-relaxed max-w-xs mx-auto">
-            Tema:{" "}
-            <strong className="font-semibold text-white">
-              Casados e Aliançados: Um casamento com propósito.
-            </strong>
+          {/* Tema */}
+          <p
+            className="text-center text-sm sm:text-base text-gray-300 mb-6 leading-relaxed"
+            style={{ fontFamily: "var(--font-cormorant)", fontSize: "clamp(14px, 4vw, 18px)" }}
+          >
+            <em>"Casados e Aliançados: Um casamento com propósito."</em>
           </p>
 
-          {/* ── Informações do Evento ── */}
-          <div className="mt-8 w-full grid grid-cols-2 gap-3">
-            <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-3">
-              <div className="p-2 rounded-full bg-purple-500/20 text-purple-400 shrink-0">
-                <Calendar className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="font-bold text-white text-sm">08/08/2026</p>
-                <p className="text-xs text-gray-400">Sábado</p>
-              </div>
-            </div>
+          {/* ── Countdown ── */}
+          <div className="mb-6">
+            <p className="text-center text-xs uppercase tracking-[0.2em] text-gray-400 mb-3"
+              style={{ fontFamily: "var(--font-inter)" }}>
+              Contagem Regressiva
+            </p>
+            <Countdown />
+          </div>
 
-            <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-3">
-              <div className="p-2 rounded-full bg-fuchsia-500/20 text-fuchsia-400 shrink-0">
-                <Clock className="w-5 h-5" />
+          {/* ── Info do Evento ── */}
+          <div className="w-full space-y-2.5 mb-7">
+            {/* Data + Hora */}
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="rounded-xl px-4 py-3"
+                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Data</p>
+                <p className="text-sm font-semibold text-white">08 de Agosto</p>
+                <p className="text-xs text-gray-400">Sábado · 2026</p>
               </div>
-              <div className="text-left">
-                <p className="font-bold text-white text-sm">18:00h</p>
+              <div className="rounded-xl px-4 py-3"
+                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Horário</p>
+                <p className="text-sm font-semibold text-white">18h00</p>
                 <p className="text-xs text-gray-400">Abertura dos portões</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-3 col-span-2">
-              <div className="p-2 rounded-full bg-blue-500/20 text-blue-400 shrink-0">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="font-bold text-white text-sm">Qd 107 Norte, AL 110, Lt 6 — Palmas/TO</p>
-                <p className="text-xs text-gray-400">Ao lado do Shopping Capim Dourado</p>
-              </div>
+            {/* Local */}
+            <div className="rounded-xl px-4 py-3"
+              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Local</p>
+              <p className="text-sm font-semibold text-white">Qd 107 Norte, AL 110, Lt 6 — Palmas/TO</p>
+              <p className="text-xs text-gray-400">Ao lado do Shopping Capim Dourado</p>
             </div>
 
-            <div className="flex items-center gap-3 bg-black/50 backdrop-blur-md border border-white/10 rounded-2xl p-3 col-span-2">
-              <div className="p-2 rounded-full bg-green-500/20 text-green-400 shrink-0">
-                <Ticket className="w-5 h-5" />
-              </div>
-              <div className="text-left">
-                <p className="font-bold text-white text-sm">5kg de alimentos não perecíveis</p>
-                <p className="text-xs text-gray-400">Entrada por casal</p>
-              </div>
+            {/* Entrada */}
+            <div className="rounded-xl px-4 py-3"
+              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Contribuição</p>
+              <p className="text-sm font-semibold text-white">5 kg de alimentos não perecíveis</p>
+              <p className="text-xs text-gray-400">Por casal · entrada solidária</p>
             </div>
           </div>
 
           {/* ── Botão CTA ── */}
           <Link
             href="/inscricao"
-            className="mt-8 inline-block w-full text-center text-lg font-bold bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white py-5 rounded-full shadow-[0_0_30px_rgba(168,85,247,0.5)] transition-all transform hover:scale-105 active:scale-95"
+            className="w-full text-center font-bold text-white py-4 rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 mb-8"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "1rem",
+              letterSpacing: "0.06em",
+              background: "linear-gradient(135deg, #7c3aed, #a21caf)",
+              boxShadow: "0 8px 32px rgba(124, 58, 237, 0.45)",
+            }}
           >
-            ✨ Inscrever-se Grátis
+            INSCREVER-SE GRATUITAMENTE
           </Link>
 
           {/* ── Cards de Atrações ── */}
-          <div className="mt-8 w-full grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="bg-white/5 backdrop-blur-md border border-purple-500/30 rounded-2xl p-5 text-center hover:bg-white/10 transition-all">
-              <span className="text-2xl mb-2 block">🎤</span>
-              <h3 className="text-base font-bold text-fuchsia-300 mb-1">Um Casal Cheio da Graça</h3>
-              <p className="text-gray-300 text-sm">Pr. Alan & Pra. Graciele Daniel</p>
+          <div className="w-full grid grid-cols-2 gap-3 pb-14">
+            <div className="rounded-2xl p-5 text-center"
+              style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)" }}>
+              <p className="text-[10px] uppercase tracking-widest text-purple-400 mb-2">Ministério</p>
+              <h3 className="text-sm font-semibold text-white leading-snug mb-1"
+                style={{ fontFamily: "var(--font-playfair)" }}>
+                Um Casal Cheio da Graça
+              </h3>
+              <p className="text-xs text-gray-400">Pr. Alan &amp; Pra. Graciele Daniel</p>
             </div>
-            <div className="bg-white/5 backdrop-blur-md border border-fuchsia-500/30 rounded-2xl p-5 text-center hover:bg-white/10 transition-all">
-              <span className="text-2xl mb-2 block">🎵</span>
-              <h3 className="text-base font-bold text-purple-300 mb-1">Louvor e Festa</h3>
-              <p className="text-gray-300 text-sm">DJ Pescadora</p>
+            <div className="rounded-2xl p-5 text-center"
+              style={{ background: "rgba(162,28,175,0.1)", border: "1px solid rgba(162,28,175,0.3)" }}>
+              <p className="text-[10px] uppercase tracking-widest text-fuchsia-400 mb-2">Louvor</p>
+              <h3 className="text-sm font-semibold text-white leading-snug mb-1"
+                style={{ fontFamily: "var(--font-playfair)" }}>
+                Louvor e Festa
+              </h3>
+              <p className="text-xs text-gray-400">DJ Pescadora</p>
             </div>
           </div>
 
         </div>
       </section>
 
-      {/* ── SEÇÃO: QUEM SÃO ── */}
-      <section className="bg-zinc-950 w-full px-4 py-14 flex flex-col items-center">
+      {/* ══════════════════════════════
+          SEÇÃO: CONHEÇA O CASAL
+      ══════════════════════════════ */}
+      <section className="bg-zinc-950 w-full px-5 py-16 flex flex-col items-center">
         <div className="w-full max-w-lg mx-auto">
 
-          {/* Título da seção */}
-          <div className="flex items-center gap-3 mb-6">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent to-purple-500/50" />
-            <h2 className="text-xs font-bold uppercase tracking-widest text-purple-400">Conheça os Ministros</h2>
-            <div className="h-px flex-1 bg-gradient-to-l from-transparent to-purple-500/50" />
+          {/* Divider decorativo */}
+          <div className="flex items-center gap-4 mb-8">
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-700/60 to-transparent" />
+            <span className="text-[10px] uppercase tracking-[0.25em] text-purple-400"
+              style={{ fontFamily: "var(--font-inter)" }}>
+              Pregadores Convidados
+            </span>
+            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-700/60 to-transparent" />
           </div>
 
-          <h3 className="text-2xl sm:text-3xl font-extrabold text-white text-center mb-6 leading-tight">
-            Quem são o{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-fuchsia-400">
-              Casal Cheio da Graça?
-            </span>
+          <h2
+            className="text-center mb-3 text-white"
+            style={{
+              fontFamily: "var(--font-playfair)",
+              fontSize: "clamp(26px, 7vw, 38px)",
+              fontWeight: 700,
+              lineHeight: 1.2,
+            }}
+          >
+            Um Casal Cheio da Graça
+          </h2>
+          <h3
+            className="text-center mb-8 text-gray-400"
+            style={{
+              fontFamily: "var(--font-cormorant)",
+              fontSize: "clamp(16px, 5vw, 20px)",
+              fontStyle: "italic",
+            }}
+          >
+            Pr. Alan Daniel &amp; Pra. Graciele Daniel
           </h3>
 
-          <p className="text-gray-300 text-sm sm:text-base leading-relaxed text-center mb-10">
-            <strong className="text-white">Pastor Alan Daniel</strong> e{" "}
-            <strong className="text-white">Pastora Graciele Daniel</strong> são líderes da Igreja do
-            Evangelho Quadrangular em Sorocaba (SP). Além de pastorear a congregação local, Alan já
-            serviu como coordenador regional do ministério de homens e Graciele como coordenadora
-            regional do ministério de adolescentes, funções que lhes conferem abrangência ministerial
-            em toda a região metropolitana de Sorocaba.
+          <p
+            className="text-gray-300 leading-relaxed text-center mb-10"
+            style={{
+              fontFamily: "var(--font-cormorant)",
+              fontSize: "clamp(15px, 4.5vw, 19px)",
+              lineHeight: 1.8,
+            }}
+          >
+            <strong className="text-white font-semibold">Pastor Alan Daniel</strong> e{" "}
+            <strong className="text-white font-semibold">Pastora Graciele Daniel</strong> são líderes da
+            Igreja do Evangelho Quadrangular em Sorocaba (SP). Além de pastorear a congregação local,
+            Alan já serviu como coordenador regional do ministério de homens e Graciele como
+            coordenadora regional do ministério de adolescentes, funções que lhes conferem abrangência
+            ministerial em toda a região metropolitana de Sorocaba.
           </p>
 
-          {/* ── Dois Shorts do YouTube ── */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-            {/* Short 1 */}
-            <div className="flex flex-col items-center gap-2">
-              <div
-                className="w-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_20px_rgba(168,85,247,0.2)]"
-                style={{ aspectRatio: "9/16", maxHeight: 500 }}
-              >
-                <iframe
-                  src="https://www.youtube.com/embed/fI_Jh6UboS0"
-                  title="Um Casal Cheio da Graça - Short 1"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                  loading="lazy"
-                />
-              </div>
+          {/* ── Dois YouTube Shorts ── */}
+          <div className="grid grid-cols-2 gap-4 mb-10">
+            <div
+              className="w-full rounded-2xl overflow-hidden"
+              style={{
+                aspectRatio: "9/16",
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+              }}
+            >
+              <iframe
+                src="https://www.youtube.com/embed/fI_Jh6UboS0"
+                title="Um Casal Cheio da Graça"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+                loading="lazy"
+              />
             </div>
-
-            {/* Short 2 */}
-            <div className="flex flex-col items-center gap-2">
-              <div
-                className="w-full rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_20px_rgba(168,85,247,0.2)]"
-                style={{ aspectRatio: "9/16", maxHeight: 500 }}
-              >
-                <iframe
-                  src="https://www.youtube.com/embed/TAxO_R3UTJQ"
-                  title="Um Casal Cheio da Graça - Short 2"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="w-full h-full"
-                  loading="lazy"
-                />
-              </div>
+            <div
+              className="w-full rounded-2xl overflow-hidden"
+              style={{
+                aspectRatio: "9/16",
+                border: "1px solid rgba(255,255,255,0.08)",
+                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
+              }}
+            >
+              <iframe
+                src="https://www.youtube.com/embed/TAxO_R3UTJQ"
+                title="Um Casal Cheio da Graça 2"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+                loading="lazy"
+              />
             </div>
           </div>
 
           {/* CTA secundário */}
           <Link
             href="/inscricao"
-            className="mt-10 inline-block w-full text-center text-base font-bold bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white py-4 rounded-full shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all transform hover:scale-105 active:scale-95"
+            className="block w-full text-center font-semibold text-white py-4 rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "0.9rem",
+              letterSpacing: "0.08em",
+              background: "linear-gradient(135deg, #7c3aed, #a21caf)",
+              boxShadow: "0 8px 24px rgba(124, 58, 237, 0.35)",
+            }}
           >
-            Quero me Inscrever →
+            GARANTIR MINHA INSCRIÇÃO
           </Link>
         </div>
       </section>
 
-      {/* ── RODAPÉ ── */}
-      <footer className="bg-black border-t border-white/5 py-8 px-4 flex flex-col items-center gap-4">
+      {/* ══════════════════════════════
+          RODAPÉ
+      ══════════════════════════════ */}
+      <footer className="bg-black border-t border-white/5 py-10 px-5 flex flex-col items-center gap-5">
         <Image
           src="/logoigreja.png"
-          alt="Logo Igreja Hope"
-          width={120}
-          height={60}
-          className="h-12 w-auto object-contain opacity-80"
+          alt="Igreja Hope"
+          width={130}
+          height={65}
+          className="h-14 w-auto object-contain opacity-75"
         />
-        <p className="text-xs text-gray-500 text-center">
+        <div className="h-px w-24 bg-white/10" />
+        <p
+          className="text-xs text-gray-600 text-center"
+          style={{ fontFamily: "var(--font-inter)", letterSpacing: "0.05em" }}
+        >
           © 2026 Igreja Hope · Rede de Casais · Todos os direitos reservados
         </p>
       </footer>
