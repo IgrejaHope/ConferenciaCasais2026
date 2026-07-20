@@ -13,7 +13,7 @@ const FormFieldContext = React.createContext<FormFieldContextValue>({} as FormFi
 const FormField = <TFieldValues extends FieldValues = FieldValues, TName extends FieldPath<TFieldValues> = FieldPath<TFieldValues>>({
     ...props
 }: ControllerProps<TFieldValues, TName>) => {
-    return React.createElement(FormFieldContext.Provider, { value: { name: props.name } }, React.createElement(Controller, props))
+    return React.createElement(FormFieldContext.Provider, { value: { name: props.name } }, React.createElement(Controller as any, props))
   }
 
 const useFormField = () => {
