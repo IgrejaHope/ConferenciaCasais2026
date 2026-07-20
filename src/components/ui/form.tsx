@@ -68,7 +68,7 @@ const useFormField = () => {
                 id: formItemId,
             "aria-describedby": !error ? `${formDescriptionId}` : `${formDescriptionId} ${formMessageId}`,
             "aria-invalid": !!error,
-            ...child.props,
+            ...child.props as any,
           })
           })
         FormControl.displayName = "FormControl"
