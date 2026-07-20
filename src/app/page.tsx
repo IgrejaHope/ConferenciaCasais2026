@@ -11,21 +11,22 @@ export default function Home() {
       ══════════════════════════════ */}
       <section className="relative w-full flex flex-col items-center overflow-hidden" style={{ minHeight: "100svh" }}>
 
-        {/* ── Foto de fundo — sem blur ── */}
+        {/* ── Foto de fundo — sem blur, sem corte ── */}
         <div className="absolute inset-0 z-0">
           <Image
             src="/fotomaisfundopreto.jpg"
             alt="Pastor Alan e Pastora Graciele Daniel"
             fill
-            className="object-cover object-top"
+            className="object-cover object-center"
             priority
             quality={100}
+            sizes="100vw"
           />
           {/* Gradiente suave apenas na parte inferior */}
           <div className="absolute inset-0"
             style={{
               background:
-                "linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.75) 65%, rgba(0,0,0,0.98) 100%)",
+                "linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.7) 62%, rgba(0,0,0,0.97) 100%)",
             }}
           />
         </div>
@@ -34,15 +35,16 @@ export default function Home() {
         <div className="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center px-5"
           style={{ paddingTop: "52svh" }}>
 
-          {/* Logo do evento — sem efeitos, só a imagem limpa */}
-          <div className="w-[75%] max-w-[300px] mx-auto mb-5">
+          {/* Logo do evento — sem efeitos, maior no desktop */}
+          <div className="w-[80%] max-w-[300px] sm:max-w-[420px] md:max-w-[500px] mx-auto mb-5">
             <Image
               src="/logodotitulo.png"
               alt="Conferência de Casais 2026"
-              width={420}
-              height={210}
+              width={500}
+              height={250}
               className="w-full h-auto object-contain"
               priority
+              sizes="(max-width: 640px) 80vw, (max-width: 768px) 420px, 500px"
             />
           </div>
 
@@ -89,12 +91,16 @@ export default function Home() {
               <p className="text-xs text-gray-400">Ao lado do Shopping Capim Dourado</p>
             </div>
 
-            {/* Entrada */}
-            <div className="rounded-xl px-4 py-3"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Contribuição</p>
+            {/* Entrada — destaque especial */}
+            <div className="rounded-xl px-4 py-3 relative overflow-hidden"
+              style={{
+                background: "rgba(251,191,36,0.07)",
+                border: "1px solid rgba(251,191,36,0.5)",
+                boxShadow: "0 0 18px rgba(251,191,36,0.15), inset 0 0 12px rgba(251,191,36,0.05)",
+              }}>
+              <p className="text-[10px] uppercase tracking-widest text-amber-400 mb-0.5">Contribuição</p>
               <p className="text-sm font-semibold text-white">5 kg de alimentos não perecíveis</p>
-              <p className="text-xs text-gray-400">Por casal · entrada solidária</p>
+              <p className="text-xs text-amber-300/70">Por casal · leve e transforme vidas</p>
             </div>
           </div>
 
@@ -113,25 +119,51 @@ export default function Home() {
             INSCREVER-SE GRATUITAMENTE
           </Link>
 
-          {/* ── Cards de Atrações ── */}
-          <div className="w-full grid grid-cols-2 gap-3 pb-14">
-            <div className="rounded-2xl p-5 text-center"
+          {/* ── Cards de Atrações com foto ── */}
+          <div className="w-full flex flex-col gap-3 pb-14">
+            {/* Ministério */}
+            <div className="rounded-2xl p-4 flex items-center gap-4"
               style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)" }}>
-              <p className="text-[10px] uppercase tracking-widest text-purple-400 mb-2">Ministério</p>
-              <h3 className="text-sm font-semibold text-white leading-snug mb-1"
-                style={{ fontFamily: "var(--font-playfair)" }}>
-                Um Casal Cheio da Graça
-              </h3>
-              <p className="text-xs text-gray-400">Pr. Alan &amp; Pra. Graciele Daniel</p>
+              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
+                style={{ border: "1px solid rgba(124,58,237,0.4)" }}>
+                <Image
+                  src="/casalfotoperfil.webp"
+                  alt="Pr. Alan e Pra. Graciele Daniel"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-purple-400 mb-0.5">Ministério</p>
+                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
+                  style={{ fontFamily: "var(--font-playfair)" }}>
+                  Um Casal Cheio da Graça
+                </h3>
+                <p className="text-xs text-gray-400">Pr. Alan &amp; Pra. Graciele Daniel</p>
+              </div>
             </div>
-            <div className="rounded-2xl p-5 text-center"
+            {/* Louvor */}
+            <div className="rounded-2xl p-4 flex items-center gap-4"
               style={{ background: "rgba(162,28,175,0.1)", border: "1px solid rgba(162,28,175,0.3)" }}>
-              <p className="text-[10px] uppercase tracking-widest text-fuchsia-400 mb-2">Louvor</p>
-              <h3 className="text-sm font-semibold text-white leading-snug mb-1"
-                style={{ fontFamily: "var(--font-playfair)" }}>
-                Louvor e Festa
-              </h3>
-              <p className="text-xs text-gray-400">DJ Pescadora</p>
+              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
+                style={{ border: "1px solid rgba(162,28,175,0.4)" }}>
+                <Image
+                  src="/dj-pescadora.webp"
+                  alt="DJ Pescadora"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-fuchsia-400 mb-0.5">Louvor</p>
+                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
+                  style={{ fontFamily: "var(--font-playfair)" }}>
+                  Louvor e Festa
+                </h3>
+                <p className="text-xs text-gray-400">DJ Pescadora</p>
+              </div>
             </div>
           </div>
 
