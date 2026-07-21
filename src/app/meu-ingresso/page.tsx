@@ -7,8 +7,6 @@ import { Ticket, ArrowLeft, Search, Calendar, MapPin, Clock, Download } from "lu
 import { Suspense, useState, useEffect, useRef } from "react";
 import { supabase } from "@/lib/supabase";
 import QRCode from "react-qr-code";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
 
 function MeuIngressoContent() {
   const searchParams = useSearchParams();
@@ -57,64 +55,8 @@ function MeuIngressoContent() {
     buscarIngresso(ticketInput);
   };
 
-  const handleDownloadPDF = async () => {
-    if (!ticketRef.current || !ticketData) return;
-    setIsDownloading(true);
-
-    try {
-      const element = ticketRef.current;
-      
-      // Salvar estilos originais
-      const originalBorder = element.style.border;
-      const originalBoxShadow = element.style.boxShadow;
-      const originalBorderRadius = element.style.borderRadius;
-      
-      // Remover bordas arredondadas e sombras para o PDF ficar mais limpo
-      element.style.borderRadius = "0";
-      element.style.boxShadow = "none";
-      element.style.border = "none";
-      // Temporariamente colocar um fundo sólido preto para evitar transparências estranhas no PDF
-      const originalBg = element.style.background;
-      element.style.background = "#111111";
-
-      const canvas = await html2canvas(element, {
-        scale: 2,
-        backgroundColor: "#111111",
-        useCORS: true,
-        logging: false,
-      });
-
-      // Restaurar estilos originais
-      element.style.borderRadius = originalBorderRadius;
-      element.style.boxShadow = originalBoxShadow;
-      element.style.border = originalBorder;
-      element.style.background = originalBg;
-
-      const imgData = canvas.toDataURL("image/jpeg", 1.0);
-      
-      const pdf = new jsPDF({
-        orientation: "portrait",
-        unit: "mm",
-        format: "a4",
-      });
-
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-      
-      // Adicionar margem superior
-      const margin = 10;
-
-      pdf.setFillColor("#000000");
-      pdf.rect(0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight(), "F");
-      
-      pdf.addImage(imgData, "JPEG", margin, margin, pdfWidth - (margin * 2), pdfHeight - (margin * 2));
-      pdf.save(`Ingresso_${ticketData.numero_inscricao}.pdf`);
-    } catch (err) {
-      console.error("Erro ao gerar PDF:", err);
-      alert("Houve um erro ao gerar o PDF do seu ingresso. Tente novamente.");
-    } finally {
-      setIsDownloading(false);
-    }
+  const handleDownloadPDF = () => {
+    window.print();
   };
 
   return (
@@ -122,8 +64,32 @@ function MeuIngressoContent() {
       className="min-h-screen bg-[#050505] text-white flex flex-col items-center p-5"
       style={{ fontFamily: "var(--font-inter)" }}
     >
+      <style>{`
+        @media print {
+          body * {
+            visibility: hidden;
+          }
+          .ticket-container, .ticket-container * {
+            visibility: visible;
+          }
+          .ticket-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            box-shadow: none !important;
+            border: none !important;
+          }
+          .no-print {
+            display: none !important;
+          }
+        }
+      `}</style>
+
       <div
-        className="fixed inset-0 z-0 pointer-events-none"
+        className="fixed inset-0 z-0 pointer-events-none no-print"
         style={{
           background:
             "radial-gradient(ellipse at 50% -20%, rgba(124,58,237,0.15) 0%, transparent 60%), #050505",
@@ -131,7 +97,7 @@ function MeuIngressoContent() {
       />
 
       {/* Cabeçalho */}
-      <header className="relative z-10 w-full pt-8 pb-6 flex flex-col items-center">
+      <header className="relative z-10 w-full pt-8 pb-6 flex flex-col items-center no-print">
         <Link href="/">
           <Image
             src="/logodotitulo.png"
@@ -155,7 +121,7 @@ function MeuIngressoContent() {
 
       <div className="relative z-10 w-full max-w-md flex flex-col items-center">
         {/* Formulário de Busca */}
-        <form onSubmit={handleSearch} className="mb-8 w-full flex gap-2">
+        <form onSubmit={handleSearch} className="mb-8 w-full flex gap-2 no-print">
           <input
             type="text"
             value={ticketInput}
@@ -189,7 +155,7 @@ function MeuIngressoContent() {
             {/* O CARD DO INGRESSO (O que será exportado para PDF) */}
             <div 
               ref={ticketRef}
-              className="w-full bg-gradient-to-b from-white/10 to-white/5 border border-white/10 rounded-3xl relative overflow-hidden backdrop-blur-md mb-6"
+              className="ticket-container w-full bg-gradient-to-b from-white/10 to-white/5 border border-white/10 rounded-3xl relative overflow-hidden backdrop-blur-md mb-6"
               style={{ boxShadow: "0 10px 40px rgba(0,0,0,0.5)" }}
             >
               {/* Decoração superior */}
@@ -293,20 +259,15 @@ function MeuIngressoContent() {
             {/* Botão de Download PDF */}
             <button
               onClick={handleDownloadPDF}
-              disabled={isDownloading}
-              className="w-full bg-white text-black font-bold py-4 px-6 rounded-full flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)] disabled:opacity-50"
+              className="no-print w-full bg-white text-black font-bold py-4 px-6 rounded-full flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)]"
             >
-              {isDownloading ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-black" />
-              ) : (
-                <Download className="w-5 h-5" />
-              )}
-              {isDownloading ? "Gerando PDF..." : "Baixar Ingresso em PDF"}
+              <Download className="w-5 h-5" />
+              Imprimir / Salvar PDF
             </button>
           </div>
         )}
 
-        <div className="mt-8 text-center w-full">
+        <div className="mt-8 text-center w-full no-print">
           <Link
             href="/"
             className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
