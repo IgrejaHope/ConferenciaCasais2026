@@ -9,10 +9,10 @@ export default function Home() {
       {/* ══════════════════════════════
           HERO
       ══════════════════════════════ */}
-      <section className="relative w-full flex flex-col items-center overflow-hidden" style={{ minHeight: "100svh" }}>
+      <section className="relative w-full flex flex-col items-center overflow-hidden">
 
-        {/* ── Foto de fundo — sem blur, sem corte ── */}
-        <div className="absolute inset-0 z-0">
+        {/* ── Foto de fundo — DESKTOP (md+): cover absoluto como antes ── */}
+        <div className="absolute inset-0 z-0 hidden md:block">
           <Image
             src="/fotomaisfundopreto.jpg"
             alt="Pastor Alan e Pastora Graciele Daniel"
@@ -31,12 +31,35 @@ export default function Home() {
           />
         </div>
 
-        {/* ── Conteúdo posicionado na metade inferior ── */}
-        <div className="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center px-5"
-          style={{ paddingTop: "52svh" }}>
+        {/* ── Foto de fundo — MOBILE (< md): contida no topo, sem corte ── */}
+        <div className="relative w-full z-0 md:hidden pt-6">
+          <div className="relative w-full" style={{ aspectRatio: "1/1" }}>
+            <Image
+              src="/fotomaisfundopreto.jpg"
+              alt="Pastor Alan e Pastora Graciele Daniel"
+              fill
+              className="object-cover"
+              style={{ objectPosition: "50% 18%" }}
+              priority
+              quality={100}
+              sizes="100vw"
+            />
+          </div>
+          {/* Gradiente que funde a foto com o fundo preto */}
+          <div className="absolute inset-0 pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.85) 88%, rgba(0,0,0,1) 100%)",
+            }}
+          />
+        </div>
 
-          {/* Logo do evento — sem efeitos, maior no desktop */}
-          <div className="w-[80%] max-w-[300px] sm:max-w-[420px] md:max-w-[500px] mx-auto mb-5">
+        {/* ── Conteúdo — MOBILE: logo sobreposta na parte inferior da imagem ── */}
+        <div className="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center px-5 md:hidden"
+          style={{ marginTop: "-100px" }}>
+
+          {/* Logo do evento */}
+          <div className="w-[80%] max-w-[300px] mx-auto mb-5">
             <Image
               src="/logodotitulo.png"
               alt="Conferência de Casais 2026"
@@ -44,16 +67,16 @@ export default function Home() {
               height={250}
               className="w-full h-auto object-contain"
               priority
-              sizes="(max-width: 640px) 80vw, (max-width: 768px) 420px, 500px"
+              sizes="80vw"
             />
           </div>
 
           {/* Tema */}
           <p
-            className="text-center text-sm sm:text-base text-gray-300 mb-6 leading-relaxed"
+            className="text-center text-sm text-gray-300 mb-6 leading-relaxed"
             style={{ fontFamily: "var(--font-cormorant)", fontSize: "clamp(14px, 4vw, 18px)" }}
           >
-            <em>"Casados e Aliançados: Um casamento com propósito."</em>
+            <em>&quot;Casados e Aliançados: Um casamento com propósito.&quot;</em>
           </p>
 
           {/* ── Countdown ── */}
@@ -67,7 +90,6 @@ export default function Home() {
 
           {/* ── Info do Evento ── */}
           <div className="w-full space-y-2.5 mb-7">
-            {/* Data + Hora */}
             <div className="grid grid-cols-2 gap-2.5">
               <div className="rounded-xl px-4 py-3"
                 style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
@@ -83,7 +105,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Local */}
             <div className="rounded-xl px-4 py-3"
               style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
               <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Local</p>
@@ -91,7 +112,6 @@ export default function Home() {
               <p className="text-xs text-gray-400">Ao lado do Shopping Capim Dourado</p>
             </div>
 
-            {/* Entrada — destaque especial */}
             <div className="rounded-xl px-4 py-3 relative overflow-hidden"
               style={{
                 background: "rgba(251,191,36,0.07)",
@@ -119,9 +139,8 @@ export default function Home() {
             INSCREVER-SE GRATUITAMENTE
           </Link>
 
-          {/* ── Cards de Atrações com foto ── */}
+          {/* ── Cards de Atrações ── */}
           <div className="w-full flex flex-col gap-3 pb-14">
-            {/* Ministério */}
             <div className="rounded-2xl p-4 flex items-center gap-4"
               style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)" }}>
               <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
@@ -143,7 +162,6 @@ export default function Home() {
                 <p className="text-xs text-gray-400">Pr. Alan &amp; Pra. Graciele Daniel</p>
               </div>
             </div>
-            {/* Louvor */}
             <div className="rounded-2xl p-4 flex items-center gap-4"
               style={{ background: "rgba(162,28,175,0.1)", border: "1px solid rgba(162,28,175,0.3)" }}>
               <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
@@ -166,8 +184,140 @@ export default function Home() {
               </div>
             </div>
           </div>
-
         </div>
+
+        {/* ── Conteúdo — DESKTOP (md+): posicionado sobre a imagem cover ── */}
+        <div className="relative z-10 w-full max-w-lg mx-auto hidden md:flex flex-col items-center px-5"
+          style={{ paddingTop: "52svh", minHeight: "100svh" }}>
+
+          {/* Logo do evento */}
+          <div className="w-[80%] max-w-[420px] md:max-w-[500px] mx-auto mb-5">
+            <Image
+              src="/logodotitulo.png"
+              alt="Conferência de Casais 2026"
+              width={500}
+              height={250}
+              className="w-full h-auto object-contain"
+              priority
+              sizes="(max-width: 768px) 420px, 500px"
+            />
+          </div>
+
+          {/* Tema */}
+          <p
+            className="text-center text-base text-gray-300 mb-6 leading-relaxed"
+            style={{ fontFamily: "var(--font-cormorant)", fontSize: "clamp(16px, 4vw, 18px)" }}
+          >
+            <em>&quot;Casados e Aliançados: Um casamento com propósito.&quot;</em>
+          </p>
+
+          {/* ── Countdown ── */}
+          <div className="mb-6">
+            <p className="text-center text-xs uppercase tracking-[0.2em] text-gray-400 mb-3"
+              style={{ fontFamily: "var(--font-inter)" }}>
+              Contagem Regressiva
+            </p>
+            <Countdown />
+          </div>
+
+          {/* ── Info do Evento ── */}
+          <div className="w-full space-y-2.5 mb-7">
+            <div className="grid grid-cols-2 gap-2.5">
+              <div className="rounded-xl px-4 py-3"
+                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Data</p>
+                <p className="text-sm font-semibold text-white">08 de Agosto</p>
+                <p className="text-xs text-gray-400">Sábado · 2026</p>
+              </div>
+              <div className="rounded-xl px-4 py-3"
+                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Horário</p>
+                <p className="text-sm font-semibold text-white">18h00</p>
+                <p className="text-xs text-gray-400">Abertura dos portões</p>
+              </div>
+            </div>
+
+            <div className="rounded-xl px-4 py-3"
+              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
+              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Local</p>
+              <p className="text-sm font-semibold text-white">Qd 107 Norte, AL 110, Lt 6 — Palmas/TO</p>
+              <p className="text-xs text-gray-400">Ao lado do Shopping Capim Dourado</p>
+            </div>
+
+            <div className="rounded-xl px-4 py-3 relative overflow-hidden"
+              style={{
+                background: "rgba(251,191,36,0.07)",
+                border: "1px solid rgba(251,191,36,0.5)",
+                boxShadow: "0 0 18px rgba(251,191,36,0.15), inset 0 0 12px rgba(251,191,36,0.05)",
+              }}>
+              <p className="text-[10px] uppercase tracking-widest text-amber-400 mb-0.5">Contribuição</p>
+              <p className="text-sm font-semibold text-white">5 kg de alimentos não perecíveis</p>
+              <p className="text-xs text-amber-300/70">Por casal · leve e transforme vidas</p>
+            </div>
+          </div>
+
+          {/* ── Botão CTA ── */}
+          <Link
+            href="/inscricao"
+            className="w-full text-center font-bold text-white py-4 rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 mb-8"
+            style={{
+              fontFamily: "var(--font-inter)",
+              fontSize: "1rem",
+              letterSpacing: "0.06em",
+              background: "linear-gradient(135deg, #7c3aed, #a21caf)",
+              boxShadow: "0 8px 32px rgba(124, 58, 237, 0.45)",
+            }}
+          >
+            INSCREVER-SE GRATUITAMENTE
+          </Link>
+
+          {/* ── Cards de Atrações ── */}
+          <div className="w-full flex flex-col gap-3 pb-14">
+            <div className="rounded-2xl p-4 flex items-center gap-4"
+              style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)" }}>
+              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
+                style={{ border: "1px solid rgba(124,58,237,0.4)" }}>
+                <Image
+                  src="/casalfotoperfil.webp"
+                  alt="Pr. Alan e Pra. Graciele Daniel"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-purple-400 mb-0.5">Ministério</p>
+                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
+                  style={{ fontFamily: "var(--font-playfair)" }}>
+                  Um Casal Cheio da Graça
+                </h3>
+                <p className="text-xs text-gray-400">Pr. Alan &amp; Pra. Graciele Daniel</p>
+              </div>
+            </div>
+            <div className="rounded-2xl p-4 flex items-center gap-4"
+              style={{ background: "rgba(162,28,175,0.1)", border: "1px solid rgba(162,28,175,0.3)" }}>
+              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
+                style={{ border: "1px solid rgba(162,28,175,0.4)" }}>
+                <Image
+                  src="/dj-pescadora.webp"
+                  alt="DJ Pescadora"
+                  width={64}
+                  height={64}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-fuchsia-400 mb-0.5">Louvor</p>
+                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
+                  style={{ fontFamily: "var(--font-playfair)" }}>
+                  Louvor e Festa
+                </h3>
+                <p className="text-xs text-gray-400">DJ Pescadora</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </section>
 
       {/* ══════════════════════════════
