@@ -124,20 +124,20 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── Botão CTA ── */}
-          <Link
-            href="/inscricao"
-            className="w-full text-center font-bold text-white py-4 rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 mb-8"
+          {/* ── Botão CTA (Encerrado) ── */}
+          <div
+            className="w-full text-center font-bold text-red-200 py-4 rounded-full mb-8 cursor-not-allowed select-none"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "1rem",
-              letterSpacing: "0.06em",
-              background: "linear-gradient(135deg, #7c3aed, #a21caf)",
-              boxShadow: "0 8px 32px rgba(124, 58, 237, 0.45)",
+              letterSpacing: "0.08em",
+              background: "rgba(225, 29, 72, 0.15)",
+              border: "1px solid rgba(225, 29, 72, 0.4)",
+              boxShadow: "0 0 20px rgba(225, 29, 72, 0.15)",
             }}
           >
-            INSCREVER-SE GRATUITAMENTE
-          </Link>
+            🔒 INSCRIÇÕES ENCERRADAS
+          </div>
 
           {/* ── Cards de Atrações ── */}
           <div className="w-full flex flex-col gap-3 pb-14">
@@ -256,20 +256,20 @@ export default function Home() {
             </div>
           </div>
 
-          {/* ── Botão CTA ── */}
-          <Link
-            href="/inscricao"
-            className="w-full text-center font-bold text-white py-4 rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95 mb-8"
+          {/* ── Botão CTA (Encerrado) ── */}
+          <div
+            className="w-full text-center font-bold text-red-200 py-4 rounded-full mb-8 cursor-not-allowed select-none"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "1rem",
-              letterSpacing: "0.06em",
-              background: "linear-gradient(135deg, #7c3aed, #a21caf)",
-              boxShadow: "0 8px 32px rgba(124, 58, 237, 0.45)",
+              letterSpacing: "0.08em",
+              background: "rgba(225, 29, 72, 0.15)",
+              border: "1px solid rgba(225, 29, 72, 0.4)",
+              boxShadow: "0 0 20px rgba(225, 29, 72, 0.15)",
             }}
           >
-            INSCREVER-SE GRATUITAMENTE
-          </Link>
+            🔒 INSCRIÇÕES ENCERRADAS
+          </div>
 
           {/* ── Cards de Atrações ── */}
           <div className="w-full flex flex-col gap-3 pb-14">
@@ -412,20 +412,20 @@ export default function Home() {
             </div>
           </div>
 
-          {/* CTA secundário */}
-          <Link
-            href="/inscricao"
-            className="block w-full text-center font-semibold text-white py-4 rounded-full transition-all duration-300 hover:scale-[1.03] active:scale-95"
+          {/* CTA secundário (Encerrado) */}
+          <div
+            className="w-full text-center font-semibold text-red-200 py-4 rounded-full cursor-not-allowed select-none"
             style={{
               fontFamily: "var(--font-inter)",
               fontSize: "0.9rem",
               letterSpacing: "0.08em",
-              background: "linear-gradient(135deg, #7c3aed, #a21caf)",
-              boxShadow: "0 8px 24px rgba(124, 58, 237, 0.35)",
+              background: "rgba(225, 29, 72, 0.15)",
+              border: "1px solid rgba(225, 29, 72, 0.4)",
+              boxShadow: "0 0 20px rgba(225, 29, 72, 0.15)",
             }}
           >
-            GARANTIR MINHA INSCRIÇÃO
-          </Link>
+            🔒 INSCRIÇÕES ENCERRADAS
+          </div>
         </div>
       </section>
 

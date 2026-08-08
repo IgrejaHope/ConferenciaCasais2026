@@ -184,7 +184,7 @@ export default function InscricaoPage() {
                 lineHeight: 1.2,
               }}
             >
-              Inscrição do Casal
+              Inscrições Encerradas
             </h1>
             <p style={{
               fontFamily: "var(--font-cormorant)",
@@ -192,160 +192,59 @@ export default function InscricaoPage() {
               color: "#9ca3af",
               fontStyle: "italic",
             }}>
-              Preencha os dados para garantir sua vaga na conferência.
+              Agradecemos pelo grande interesse! As vagas para a Conferência de Casais 2026 foram totalmente preenchidas.
             </p>
           </div>
 
-          {/* Erro global */}
-          {errorMsg && (
-            <div
-              className="mb-5 px-4 py-3 rounded-xl text-sm text-center"
-              style={{
-                background: "rgba(239,68,68,0.1)",
-                border: "1px solid rgba(239,68,68,0.35)",
-                color: "#fca5a5",
-              }}
-            >
-              {errorMsg}
-            </div>
-          )}
-
-          {/* Card do formulário */}
+          {/* Card de Inscrições Encerradas */}
           <div
             style={{
               background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.09)",
+              border: "1px solid rgba(239, 68, 68, 0.3)",
               borderRadius: 20,
-              padding: "32px 24px",
+              padding: "36px 24px",
               backdropFilter: "blur(12px)",
+              textAlign: "center",
             }}
           >
-            <form onSubmit={handleSubmit(onSubmit)} noValidate>
+            <div className="w-16 h-16 rounded-full mx-auto mb-4 flex items-center justify-center text-3xl"
+              style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.3)" }}>
+              🔒
+            </div>
 
-              {/* ── Dados do Marido ── */}
-              <SectionDivider label="Dados do Marido" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-6">
-                <Field label="Nome completo" error={errors.nome_ele?.message}>
-                  <input
-                    {...register("nome_ele")}
-                    placeholder="Nome dele"
-                    style={inputStyle}
-                    className="focus-input"
-                  />
-                </Field>
-                <Field label="CPF" error={errors.cpf_ele?.message}>
-                  <input
-                    {...register("cpf_ele")}
-                    placeholder="000.000.000-00"
-                    maxLength={14}
-                    style={inputStyle}
-                    className="focus-input"
-                    onChange={(e) => setValue("cpf_ele", maskCPF(e.target.value))}
-                    value={watch("cpf_ele") || ""}
-                  />
-                </Field>
-              </div>
+            <h2 className="text-lg font-bold text-white mb-2" style={{ fontFamily: "var(--font-playfair)" }}>
+              Vagas Esgotadas
+            </h2>
 
-              {/* ── Dados da Esposa ── */}
-              <SectionDivider label="Dados da Esposa" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-6">
-                <Field label="Nome completo" error={errors.nome_ela?.message}>
-                  <input
-                    {...register("nome_ela")}
-                    placeholder="Nome dela"
-                    style={inputStyle}
-                    className="focus-input"
-                  />
-                </Field>
-                <Field label="CPF" error={errors.cpf_ela?.message}>
-                  <input
-                    {...register("cpf_ela")}
-                    placeholder="000.000.000-00"
-                    maxLength={14}
-                    style={inputStyle}
-                    className="focus-input"
-                    onChange={(e) => setValue("cpf_ela", maskCPF(e.target.value))}
-                    value={watch("cpf_ela") || ""}
-                  />
-                </Field>
-              </div>
+            <p className="text-sm text-gray-300 mb-6 leading-relaxed" style={{ fontFamily: "var(--font-inter)" }}>
+              Não estamos mais aceitando novos cadastros no momento. Caso você já tenha se inscrito, pode visualizar e baixar seu ingresso a qualquer momento.
+            </p>
 
-              {/* ── Contato ── */}
-              <SectionDivider label="Contato do Casal" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4 mb-8">
-                <Field label="E-mail" error={errors.email?.message}>
-                  <input
-                    {...register("email")}
-                    type="email"
-                    placeholder="casal@email.com"
-                    style={inputStyle}
-                    className="focus-input"
-                  />
-                </Field>
-                <Field label="WhatsApp" error={errors.telefone?.message}>
-                  <input
-                    {...register("telefone")}
-                    placeholder="(00) 00000-0000"
-                    maxLength={15}
-                    style={inputStyle}
-                    className="focus-input"
-                    onChange={(e) => setValue("telefone", maskPhone(e.target.value))}
-                    value={watch("telefone") || ""}
-                  />
-                </Field>
-              </div>
-
-              {/* ── Botão ── */}
-              <button
-                type="submit"
-                disabled={isLoading}
+            <div className="flex flex-col gap-3">
+              <Link
+                href="/meu-ingresso"
+                className="w-full py-3.5 px-4 rounded-full text-sm font-semibold text-white transition-all hover:scale-[1.02] active:scale-95 text-center"
                 style={{
-                  width: "100%",
-                  padding: "16px",
-                  borderRadius: 50,
-                  border: "none",
-                  cursor: isLoading ? "not-allowed" : "pointer",
-                  background: isLoading
-                    ? "rgba(124,58,237,0.4)"
-                    : "linear-gradient(135deg, #7c3aed, #a21caf)",
-                  color: "#fff",
-                  fontSize: "0.95rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.07em",
+                  background: "linear-gradient(135deg, #7c3aed, #a21caf)",
+                  boxShadow: "0 4px 20px rgba(124, 58, 237, 0.4)",
                   fontFamily: "var(--font-inter)",
-                  boxShadow: isLoading ? "none" : "0 8px 32px rgba(124,58,237,0.45)",
-                  transition: "all 0.3s",
-                  opacity: isLoading ? 0.7 : 1,
                 }}
               >
-                {isLoading ? "PROCESSANDO..." : "CONFIRMAR INSCRIÇÃO"}
-              </button>
+                🎟️ CONSULTAR MEU INGRESSO
+              </Link>
 
-            </form>
-          </div>
-
-          {/* Nota sobre contribuição */}
-          <div
-            className="mt-5 px-4 py-3 rounded-xl text-center"
-            style={{
-              background: "rgba(251,191,36,0.07)",
-              border: "1px solid rgba(251,191,36,0.4)",
-              boxShadow: "0 0 16px rgba(251,191,36,0.1)",
-            }}
-          >
-            <p style={{ fontSize: 12, color: "#fcd34d", fontFamily: "var(--font-inter)", letterSpacing: "0.03em" }}>
-              Contribuição: <strong>5 kg de alimentos não perecíveis por casal</strong>
-            </p>
-          </div>
-
-          {/* Voltar */}
-          <div className="mt-6 text-center">
-            <Link
-              href="/"
-              style={{ fontSize: 13, color: "#6b7280", fontFamily: "var(--font-inter)", textDecoration: "none" }}
-            >
-              ← Voltar para a página inicial
-            </Link>
+              <Link
+                href="/"
+                className="w-full py-3.5 px-4 rounded-full text-sm font-medium text-gray-300 transition-all hover:bg-white/10 text-center"
+                style={{
+                  background: "rgba(255,255,255,0.05)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  fontFamily: "var(--font-inter)",
+                }}
+              >
+                ← Voltar para a Página Inicial
+              </Link>
+            </div>
           </div>
 
         </div>
