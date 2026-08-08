@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -98,6 +98,25 @@ export default function AdminDashboardPage() {
     window.print();
   };
 
+  // Ordenação alfabética pelo nome do marido exclusivamente para a versão impressa
+  const inscricoesOrdenadas = [...inscricoes].sort((a, b) =>
+    (a.nome_ele || "").trim().localeCompare((b.nome_ele || "").trim(), "pt-BR", { sensitivity: "base" })
+  );
+
+  // Agrupamento por letra inicial do nome do marido
+  const inscricoesPorLetra = inscricoesOrdenadas.reduce((acc, insc) => {
+    const primeiraLetra = ((insc.nome_ele || "").trim()[0] || "#").toUpperCase();
+    if (!acc[primeiraLetra]) {
+      acc[primeiraLetra] = [];
+    }
+    acc[primeiraLetra].push(insc);
+    return acc;
+  }, {} as Record<string, typeof inscricoes>);
+
+  const letrasOrdenadas = Object.keys(inscricoesPorLetra).sort((a, b) =>
+    a.localeCompare(b, "pt-BR")
+  );
+
   if (!isAuthenticated) return null;
 
   return (
@@ -110,7 +129,7 @@ export default function AdminDashboardPage() {
         @media print {
           @page {
             size: A4 portrait;
-            margin: 12mm;
+            margin: 10mm;
           }
           body {
             background-color: #ffffff !important;
@@ -164,7 +183,7 @@ export default function AdminDashboardPage() {
             <button
               onClick={handlePrint}
               className="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-xl transition-all shadow-[0_0_15px_rgba(124,58,237,0.3)] flex items-center gap-2 cursor-pointer active:scale-95"
-              title="Imprimir Lista de Casais (Formato A4)"
+              title="Imprimir Lista de Credenciamento (A4 - Ordem Alfabética)"
             >
               <Printer className="w-4 h-4" />
               <span>Imprimir Lista</span>
@@ -214,7 +233,7 @@ export default function AdminDashboardPage() {
           </div>
         )}
 
-        {/* Tabela de Inscrições Web (apenas em tela) */}
+        {/* Tabela de Inscrições Web (apenas em tela - mantida por ordem cronológica) */}
         <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md flex flex-col shadow-xl print-hidden">
           {loading ? (
             <div className="flex-1 flex items-center justify-center p-12">
@@ -299,23 +318,23 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* ═══════════════════════════════════════════════════════════════ */}
-        {/* LAYOUT EXCLUSIVO DE IMPRESSÃO (A4)                              */}
+        {/* LAYOUT EXCLUSIVO DE IMPRESSÃO - CREDENCIAMENTO E CHECK-IN (A4)  */}
         {/* ═══════════════════════════════════════════════════════════════ */}
         <div className="hidden print-only w-full bg-white text-black p-0">
           
           {/* Cabeçalho do Relatório */}
-          <div className="border-b-2 border-black pb-4 mb-5">
-            <div className="flex justify-between items-start mb-3">
+          <div className="border-b-2 border-black pb-4 mb-4">
+            <div className="flex justify-between items-start mb-2">
               <div>
                 <h1 className="text-2xl font-extrabold uppercase tracking-wide text-black font-sans">
                   Conferência de Casais 2026
                 </h1>
-                <p className="text-xs font-semibold text-gray-700 uppercase tracking-widest mt-0.5">
-                  Relatório Oficial de Casais Cadastrados · Igreja Hope
+                <p className="text-xs font-bold text-gray-800 uppercase tracking-widest mt-0.5">
+                  Lista Oficial de Credenciamento e Check-in de Presença · Igreja Hope
                 </p>
               </div>
-              <div className="text-right text-[11px] text-gray-600">
-                <p><span className="font-semibold text-black">Data de Impressão:</span> {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</p>
+              <div className="text-right text-[11px] text-gray-700">
+                <p><span className="font-bold text-black">Data de Impressão:</span> {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</p>
               </div>
             </div>
 
@@ -336,50 +355,67 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* Tabela Formatada para A4 */}
+          {/* Tabela de Credenciamento por Ordem Alfabética e Agrupada por Letra */}
           <table className="w-full text-left text-xs border-collapse">
             <thead>
-              <tr className="border-b-2 border-black bg-gray-100 text-black uppercase font-bold text-[10px]">
-                <th className="py-2 px-2.5 border-b border-black w-24">Ingresso</th>
-                <th className="py-2 px-2.5 border-b border-black w-20">Data</th>
+              <tr className="border-b-2 border-black bg-gray-200 text-black uppercase font-bold text-[10px]">
+                <th className="py-2 px-2 text-center border-b border-black w-12">Check</th>
                 <th className="py-2 px-2.5 border-b border-black">Nome do Marido</th>
                 <th className="py-2 px-2.5 border-b border-black">Nome da Esposa</th>
                 <th className="py-2 px-2.5 border-b border-black">Contato / WhatsApp</th>
+                <th className="py-2 px-2.5 border-b border-black w-24">Ingresso</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
-              {inscricoes.map((insc) => (
-                <tr key={insc.id} className="border-b border-gray-200">
-                  <td className="py-2.5 px-2.5 font-mono font-bold text-black text-[11px] align-top">
-                    {insc.numero_inscricao}
-                  </td>
-                  <td className="py-2.5 px-2.5 text-gray-700 whitespace-nowrap text-[11px] align-top">
-                    {new Date(insc.created_at).toLocaleDateString("pt-BR", {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric"
-                    })}
-                  </td>
-                  <td className="py-2.5 px-2.5 align-top">
-                    <p className="font-semibold text-black text-[11px]">{insc.nome_ele}</p>
-                    <p className="text-[9px] text-gray-500 mt-0.5">CPF: {insc.cpf_ele}</p>
-                  </td>
-                  <td className="py-2.5 px-2.5 align-top">
-                    <p className="font-semibold text-black text-[11px]">{insc.nome_ela}</p>
-                    <p className="text-[9px] text-gray-500 mt-0.5">CPF: {insc.cpf_ela}</p>
-                  </td>
-                  <td className="py-2.5 px-2.5 align-top">
-                    <p className="font-semibold text-black text-[11px]">{insc.telefone}</p>
-                    <p className="text-[9px] text-gray-500 mt-0.5">{insc.email}</p>
-                  </td>
-                </tr>
+            <tbody>
+              {letrasOrdenadas.map((letra) => (
+                <React.Fragment key={letra}>
+                  {/* Cabeçalho da Letra */}
+                  <tr className="bg-black text-white font-bold">
+                    <td colSpan={5} className="py-1.5 px-3 text-xs tracking-wider uppercase font-sans">
+                      Letra {letra} ({inscricoesPorLetra[letra].length} {inscricoesPorLetra[letra].length === 1 ? 'casal' : 'casais'})
+                    </td>
+                  </tr>
+
+                  {/* Linhas dos Casais da Letra */}
+                  {inscricoesPorLetra[letra].map((insc) => (
+                    <tr key={insc.id} className="border-b border-gray-300">
+                      {/* Caixa de Check-in */}
+                      <td className="py-2.5 px-2 text-center align-middle border-r border-gray-200">
+                        <div className="w-4 h-4 border-2 border-black rounded-[2px] mx-auto bg-white" />
+                      </td>
+                      
+                      {/* Marido */}
+                      <td className="py-2.5 px-2.5 align-top border-r border-gray-200">
+                        <p className="font-bold text-black text-[12px]">{insc.nome_ele}</p>
+                        <p className="text-[9px] text-gray-600 mt-0.5">CPF: {insc.cpf_ele}</p>
+                      </td>
+
+                      {/* Esposa */}
+                      <td className="py-2.5 px-2.5 align-top border-r border-gray-200">
+                        <p className="font-medium text-black text-[11px]">{insc.nome_ela}</p>
+                        <p className="text-[9px] text-gray-600 mt-0.5">CPF: {insc.cpf_ela}</p>
+                      </td>
+
+                      {/* Contato */}
+                      <td className="py-2.5 px-2.5 align-top border-r border-gray-200">
+                        <p className="font-semibold text-black text-[11px]">{insc.telefone}</p>
+                        <p className="text-[9px] text-gray-600 mt-0.5">{insc.email}</p>
+                      </td>
+
+                      {/* Ingresso */}
+                      <td className="py-2.5 px-2.5 font-mono font-bold text-black text-[11px] align-top">
+                        {insc.numero_inscricao}
+                      </td>
+                    </tr>
+                  ))}
+                </React.Fragment>
               ))}
             </tbody>
           </table>
 
           {/* Rodapé da Impressão */}
-          <div className="mt-8 pt-3 border-t border-gray-300 text-center text-[10px] text-gray-500">
-            <p>© 2026 Igreja Hope · Conferência de Casais · Relatório Gerado Automaticamente</p>
+          <div className="mt-8 pt-3 border-t border-gray-400 text-center text-[10px] text-gray-600">
+            <p>© 2026 Igreja Hope · Conferência de Casais · Lista de Credenciamento Gerada Automaticamente</p>
           </div>
         </div>
 
