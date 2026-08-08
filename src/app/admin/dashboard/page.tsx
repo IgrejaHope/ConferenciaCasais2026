@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { LogOut, Users, Download, ArrowLeft, Trash2, MessageCircle, AlertCircle } from "lucide-react";
+import { LogOut, Users, Download, ArrowLeft, Trash2, MessageCircle, AlertCircle, Printer } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 
 type Inscricao = {
@@ -94,6 +94,10 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   if (!isAuthenticated) return null;
 
   return (
@@ -101,9 +105,37 @@ export default function AdminDashboardPage() {
       className="min-h-screen bg-[#050505] text-white flex flex-col p-4 md:p-8"
       style={{ fontFamily: "var(--font-inter)" }}
     >
-      {/* Background Decorativo */}
+      {/* Estilos Globais de Impressão (A4) */}
+      <style jsx global>{`
+        @media print {
+          @page {
+            size: A4 portrait;
+            margin: 12mm;
+          }
+          body {
+            background-color: #ffffff !important;
+            color: #000000 !important;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+          }
+          .print-hidden {
+            display: none !important;
+          }
+          .print-only {
+            display: block !important;
+          }
+          thead {
+            display: table-header-group !important;
+          }
+          tr {
+            page-break-inside: avoid !important;
+          }
+        }
+      `}</style>
+
+      {/* Background Decorativo (apenas em tela) */}
       <div
-        className="fixed inset-0 z-0 pointer-events-none opacity-50"
+        className="fixed inset-0 z-0 pointer-events-none opacity-50 print-hidden"
         style={{
           background:
             "radial-gradient(circle at 100% 0%, rgba(124,58,237,0.15) 0%, transparent 40%), radial-gradient(circle at 0% 100%, rgba(162,28,175,0.1) 0%, transparent 40%)",
@@ -112,8 +144,8 @@ export default function AdminDashboardPage() {
 
       <div className="relative z-10 w-full max-w-7xl mx-auto flex flex-col h-full flex-1">
         
-        {/* Cabeçalho */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+        {/* Cabeçalho do Painel Web (apenas em tela) */}
+        <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6 print-hidden">
           <div className="flex items-center gap-5">
             <div className="hidden md:flex w-16 h-16 bg-white/5 rounded-2xl items-center justify-center border border-white/10 shadow-[0_0_20px_rgba(124,58,237,0.15)]">
               <Users className="w-8 h-8 text-purple-400" />
@@ -128,7 +160,16 @@ export default function AdminDashboardPage() {
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={handlePrint}
+              className="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-purple-600 to-fuchsia-600 hover:from-purple-500 hover:to-fuchsia-500 text-white rounded-xl transition-all shadow-[0_0_15px_rgba(124,58,237,0.3)] flex items-center gap-2 cursor-pointer active:scale-95"
+              title="Imprimir Lista de Casais (Formato A4)"
+            >
+              <Printer className="w-4 h-4" />
+              <span>Imprimir Lista</span>
+            </button>
+
             <Link
               href="/"
               className="px-4 py-2 text-sm font-medium bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl transition-colors flex items-center gap-2"
@@ -136,6 +177,7 @@ export default function AdminDashboardPage() {
               <ArrowLeft className="w-4 h-4" />
               <span>Ver Site</span>
             </Link>
+
             <button
               onClick={handleLogout}
               className="px-4 py-2 text-sm font-medium bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 rounded-xl transition-colors flex items-center gap-2"
@@ -146,8 +188,8 @@ export default function AdminDashboardPage() {
           </div>
         </header>
 
-        {/* Resumo/Métricas */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        {/* Resumo/Métricas (apenas em tela) */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-8 print-hidden">
           <div className="bg-gradient-to-br from-white/10 to-white/5 border border-white/10 rounded-2xl p-5 backdrop-blur-md">
             <p className="text-xs uppercase tracking-widest text-gray-400 mb-1">Total de Casais</p>
             <p className="text-4xl font-bold text-white font-mono">{inscricoes.length}</p>
@@ -166,14 +208,14 @@ export default function AdminDashboardPage() {
         </div>
 
         {errorMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-3">
+          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 flex items-center gap-3 print-hidden">
             <AlertCircle className="w-5 h-5" />
             <p>{errorMsg}</p>
           </div>
         )}
 
-        {/* Tabela de Inscrições */}
-        <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md flex flex-col shadow-xl">
+        {/* Tabela de Inscrições Web (apenas em tela) */}
+        <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl overflow-hidden backdrop-blur-md flex flex-col shadow-xl print-hidden">
           {loading ? (
             <div className="flex-1 flex items-center justify-center p-12">
               <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-500" />
@@ -255,6 +297,92 @@ export default function AdminDashboardPage() {
             </div>
           )}
         </div>
+
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        {/* LAYOUT EXCLUSIVO DE IMPRESSÃO (A4)                              */}
+        {/* ═══════════════════════════════════════════════════════════════ */}
+        <div className="hidden print-only w-full bg-white text-black p-0">
+          
+          {/* Cabeçalho do Relatório */}
+          <div className="border-b-2 border-black pb-4 mb-5">
+            <div className="flex justify-between items-start mb-3">
+              <div>
+                <h1 className="text-2xl font-extrabold uppercase tracking-wide text-black font-sans">
+                  Conferência de Casais 2026
+                </h1>
+                <p className="text-xs font-semibold text-gray-700 uppercase tracking-widest mt-0.5">
+                  Relatório Oficial de Casais Cadastrados · Igreja Hope
+                </p>
+              </div>
+              <div className="text-right text-[11px] text-gray-600">
+                <p><span className="font-semibold text-black">Data de Impressão:</span> {new Date().toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" })} às {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</p>
+              </div>
+            </div>
+
+            {/* Resumo de Indicadores */}
+            <div className="grid grid-cols-3 gap-3 pt-3 border-t border-gray-300 text-center">
+              <div className="bg-gray-50 p-2 rounded border border-gray-300">
+                <p className="text-[9px] uppercase font-bold tracking-wider text-gray-600">Total de Casais</p>
+                <p className="text-lg font-bold text-black font-mono mt-0.5">{inscricoes.length}</p>
+              </div>
+              <div className="bg-gray-50 p-2 rounded border border-gray-300">
+                <p className="text-[9px] uppercase font-bold tracking-wider text-gray-600">Total de Pessoas</p>
+                <p className="text-lg font-bold text-black font-mono mt-0.5">{inscricoes.length * 2}</p>
+              </div>
+              <div className="bg-gray-50 p-2 rounded border border-gray-300">
+                <p className="text-[9px] uppercase font-bold tracking-wider text-gray-600">Alimentos (Estimativa)</p>
+                <p className="text-lg font-bold text-black font-mono mt-0.5">{inscricoes.length * 5} <span className="text-xs font-normal">KG</span></p>
+              </div>
+            </div>
+          </div>
+
+          {/* Tabela Formatada para A4 */}
+          <table className="w-full text-left text-xs border-collapse">
+            <thead>
+              <tr className="border-b-2 border-black bg-gray-100 text-black uppercase font-bold text-[10px]">
+                <th className="py-2 px-2.5 border-b border-black w-24">Ingresso</th>
+                <th className="py-2 px-2.5 border-b border-black w-20">Data</th>
+                <th className="py-2 px-2.5 border-b border-black">Nome do Marido</th>
+                <th className="py-2 px-2.5 border-b border-black">Nome da Esposa</th>
+                <th className="py-2 px-2.5 border-b border-black">Contato / WhatsApp</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-200">
+              {inscricoes.map((insc) => (
+                <tr key={insc.id} className="border-b border-gray-200">
+                  <td className="py-2.5 px-2.5 font-mono font-bold text-black text-[11px] align-top">
+                    {insc.numero_inscricao}
+                  </td>
+                  <td className="py-2.5 px-2.5 text-gray-700 whitespace-nowrap text-[11px] align-top">
+                    {new Date(insc.created_at).toLocaleDateString("pt-BR", {
+                      day: "2-digit",
+                      month: "2-digit",
+                      year: "numeric"
+                    })}
+                  </td>
+                  <td className="py-2.5 px-2.5 align-top">
+                    <p className="font-semibold text-black text-[11px]">{insc.nome_ele}</p>
+                    <p className="text-[9px] text-gray-500 mt-0.5">CPF: {insc.cpf_ele}</p>
+                  </td>
+                  <td className="py-2.5 px-2.5 align-top">
+                    <p className="font-semibold text-black text-[11px]">{insc.nome_ela}</p>
+                    <p className="text-[9px] text-gray-500 mt-0.5">CPF: {insc.cpf_ela}</p>
+                  </td>
+                  <td className="py-2.5 px-2.5 align-top">
+                    <p className="font-semibold text-black text-[11px]">{insc.telefone}</p>
+                    <p className="text-[9px] text-gray-500 mt-0.5">{insc.email}</p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Rodapé da Impressão */}
+          <div className="mt-8 pt-3 border-t border-gray-300 text-center text-[10px] text-gray-500">
+            <p>© 2026 Igreja Hope · Conferência de Casais · Relatório Gerado Automaticamente</p>
+          </div>
+        </div>
+
       </div>
     </main>
   );
