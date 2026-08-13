@@ -19,10 +19,17 @@ export async function POST(request: Request) {
       return Response.json({ erro: "Senha incorreta." }, { status: 401 });
     }
   } catch (erro) {
-    console.error("Falha na verificação da senha do admin:", erro);
+    // O detalhe técnico fica no log do servidor; quem está na tela vê algo
+    // que dá para entender e agir.
+    console.error(
+      "ADMIN_PASSWORD não está definida no ambiente — o login não tem como funcionar.",
+      erro
+    );
     return Response.json(
-      { erro: "Painel não configurado. Defina ADMIN_PASSWORD no ambiente." },
-      { status: 500 }
+      {
+        erro: "O painel ainda não foi liberado neste site. Fale com quem cuida da página.",
+      },
+      { status: 503 }
     );
   }
 

@@ -31,10 +31,7 @@ const inter = Inter({
  * próprio, defina NEXT_PUBLIC_SITE_URL (ex.: https://rifadajoselete.com.br).
  */
 const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_PROJECT_PRODUCTION_URL
-    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-    : "http://localhost:3000");
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://rifa.igrejahope.com.br";
 
 const TITULO = "Rifa Solidária · Uma corrente de fé por Joselete";
 const DESCRICAO =
