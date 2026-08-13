@@ -27,7 +27,8 @@ export default async function AdminDashboardPage() {
         .from("rifa_numeros")
         .select("id, status, nome_comprador, email_comprador, data_reserva")
         .eq("status", "reservado")
-        .order("data_reserva", { ascending: true }),
+        // Mais recente primeiro: quem acabou de reservar aparece no topo.
+        .order("data_reserva", { ascending: false }),
       supabase.from("rifa_numeros").select("status"),
     ]);
 
