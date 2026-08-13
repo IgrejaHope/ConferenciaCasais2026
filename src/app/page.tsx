@@ -1,454 +1,171 @@
 import Image from "next/image";
-import Link from "next/link";
-import Countdown from "@/components/Countdown";
+import { Anchor, CalendarDays, Cog, HeartHandshake } from "lucide-react";
+import PainelRifa from "@/components/PainelRifa";
+import { formatarReal, META, TOTAL_NUMEROS, VALOR_COTA } from "@/lib/rifa";
+
+const ESPECIFICACOES = [
+  { icone: CalendarDays, rotulo: "Ano", valor: "2026" },
+  { icone: Cog, rotulo: "Motor", valor: "Tohatsu 18HP" },
+  { icone: Anchor, rotulo: "Estado", valor: "Pouco uso" },
+];
+
+const GALERIA = [
+  { src: "/canoa01.webp", alt: "Canoa completa sobre a carreta, vista frontal" },
+  { src: "/canoa02.jpeg", alt: "Vista traseira da canoa com o motor de popa" },
+  { src: "/canoa03.jpeg", alt: "Detalhe do motor Tohatsu 18HP" },
+  { src: "/canoa04.jpeg", alt: "Vista lateral da embarcação" },
+  { src: "/canoa05.jpeg", alt: "Interior e proa da canoa" },
+  { src: "/canoa06.jpeg", alt: "Roda e estrutura da carreta" },
+];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-black text-white flex flex-col" style={{ fontFamily: "var(--font-inter)" }}>
+    <main
+      className="flex min-h-screen flex-col bg-[#1a1a1a] text-white"
+      style={{ fontFamily: "var(--font-inter)" }}
+    >
+      {/* ══════════════════════ HERO ══════════════════════ */}
+      <section className="relative bg-[url('/Capa-canoa.webp')] bg-cover bg-center bg-no-repeat">
+        {/* Camadas escuras: leitura do texto + fusão com o fundo da página */}
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/20 to-[#1a1a1a]" />
 
-      {/* ══════════════════════════════
-          HERO
-      ══════════════════════════════ */}
-      <section className="relative w-full flex flex-col items-center overflow-hidden">
+        <div className="relative mx-auto flex min-h-[82svh] w-full max-w-4xl flex-col items-center justify-center px-5 py-16 text-center md:min-h-[80vh] md:py-20">
+          {/* whitespace-nowrap + tipografia menor no mobile: em duas linhas
+              a pílula arredondada fica com a última palavra órfã. */}
+          <span className="mb-7 inline-flex max-w-full items-center gap-2 whitespace-nowrap rounded-full border border-[#d4af37]/50 bg-black/50 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.08em] text-[#d4af37] backdrop-blur-sm sm:px-4 sm:text-xs sm:tracking-[0.15em]">
+            <HeartHandshake className="h-3.5 w-3.5 shrink-0" />
+            Embarcação Nova 2026 · {formatarReal(VALOR_COTA)} a cota
+          </span>
 
-        {/* ── Foto de fundo — DESKTOP (md+): cover absoluto como antes ── */}
-        <div className="absolute inset-0 z-0 hidden md:block">
-          <Image
-            src="/fotomaisfundopreto.jpg"
-            alt="Pastor Alan e Pastora Graciele Daniel"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={100}
-            sizes="100vw"
-          />
-          {/* Gradiente suave apenas na parte inferior */}
-          <div className="absolute inset-0"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.05) 35%, rgba(0,0,0,0.7) 62%, rgba(0,0,0,0.97) 100%)",
-            }}
-          />
-        </div>
-
-        {/* ── Foto de fundo — MOBILE (< md): contida no topo, sem corte ── */}
-        <div className="relative w-full z-0 md:hidden pt-6">
-          <div className="relative w-full" style={{ aspectRatio: "1/1" }}>
-            <Image
-              src="/fotomaisfundopreto.jpg"
-              alt="Pastor Alan e Pastora Graciele Daniel"
-              fill
-              className="object-cover"
-              style={{ objectPosition: "50% 18%" }}
-              priority
-              quality={100}
-              sizes="100vw"
-            />
-          </div>
-          {/* Gradiente que funde a foto com o fundo preto */}
-          <div className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 50%, rgba(0,0,0,0.4) 70%, rgba(0,0,0,0.85) 88%, rgba(0,0,0,1) 100%)",
-            }}
-          />
-        </div>
-
-        {/* ── Conteúdo — MOBILE: logo sobreposta na parte inferior da imagem ── */}
-        <div className="relative z-10 w-full max-w-lg mx-auto flex flex-col items-center px-5 md:hidden"
-          style={{ marginTop: "-100px" }}>
-
-          {/* Logo do evento */}
-          <div className="w-[80%] max-w-[300px] mx-auto mb-5">
-            <Image
-              src="/logodotitulo.png"
-              alt="Conferência de Casais 2026"
-              width={500}
-              height={250}
-              className="w-full h-auto object-contain"
-              priority
-              sizes="80vw"
-            />
-          </div>
-
-          {/* Tema */}
-          <p
-            className="text-center text-sm text-gray-300 mb-6 leading-relaxed"
-            style={{ fontFamily: "var(--font-cormorant)", fontSize: "clamp(14px, 4vw, 18px)" }}
+          <h1
+            className="text-5xl font-bold uppercase leading-[0.95] tracking-tight text-[#d4af37] drop-shadow-[0_2px_20px_rgba(0,0,0,0.9)] sm:text-6xl md:text-8xl"
+            style={{ fontFamily: "var(--font-playfair)" }}
           >
-            <em>&quot;Casados e Aliançados: Um casamento com propósito.&quot;</em>
-          </p>
-
-          {/* ── Countdown ── */}
-          <div className="mb-6">
-            <p className="text-center text-xs uppercase tracking-[0.2em] text-gray-400 mb-3"
-              style={{ fontFamily: "var(--font-inter)" }}>
-              Contagem Regressiva
-            </p>
-            <Countdown />
-          </div>
-
-          {/* ── Info do Evento ── */}
-          <div className="w-full space-y-2.5 mb-7">
-            <div className="grid grid-cols-2 gap-2.5">
-              <div className="rounded-xl px-4 py-3"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Data</p>
-                <p className="text-sm font-semibold text-white">08 de Agosto</p>
-                <p className="text-xs text-gray-400">Sábado · 2026</p>
-              </div>
-              <div className="rounded-xl px-4 py-3"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Horário</p>
-                <p className="text-sm font-semibold text-white">18h00</p>
-                <p className="text-xs text-gray-400">Abertura dos portões</p>
-              </div>
-            </div>
-
-            <div className="rounded-xl px-4 py-3"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Local</p>
-              <p className="text-sm font-semibold text-white">Qd 107 Norte, AL 110, Lt 6 — Palmas/TO</p>
-              <p className="text-xs text-gray-400">Ao lado do Shopping Capim Dourado</p>
-            </div>
-
-            <div className="rounded-xl px-4 py-3 relative overflow-hidden"
-              style={{
-                background: "rgba(251,191,36,0.07)",
-                border: "1px solid rgba(251,191,36,0.5)",
-                boxShadow: "0 0 18px rgba(251,191,36,0.15), inset 0 0 12px rgba(251,191,36,0.05)",
-              }}>
-              <p className="text-[10px] uppercase tracking-widest text-amber-400 mb-0.5">Contribuição</p>
-              <p className="text-sm font-semibold text-white">5 kg de alimentos não perecíveis</p>
-              <p className="text-xs text-amber-300/70">Por casal · leve e transforme vidas</p>
-            </div>
-          </div>
-
-          {/* ── Botão CTA (Encerrado) ── */}
-          <div
-            className="w-full text-center font-bold text-red-200 py-4 rounded-full mb-8 cursor-not-allowed select-none"
-            style={{
-              fontFamily: "var(--font-inter)",
-              fontSize: "1rem",
-              letterSpacing: "0.08em",
-              background: "rgba(225, 29, 72, 0.15)",
-              border: "1px solid rgba(225, 29, 72, 0.4)",
-              boxShadow: "0 0 20px rgba(225, 29, 72, 0.15)",
-            }}
-          >
-            🔒 INSCRIÇÕES ENCERRADAS
-          </div>
-
-          {/* ── Cards de Atrações ── */}
-          <div className="w-full flex flex-col gap-3 pb-14">
-            <div className="rounded-2xl p-4 flex items-center gap-4"
-              style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)" }}>
-              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(124,58,237,0.4)" }}>
-                <Image
-                  src="/casalfotoperfil.webp"
-                  alt="Pr. Alan e Pra. Graciele Daniel"
-                  width={64}
-                  height={64}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-purple-400 mb-0.5">Ministério</p>
-                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
-                  style={{ fontFamily: "var(--font-playfair)" }}>
-                  Um Casal Cheio da Graça
-                </h3>
-                <p className="text-xs text-gray-400">Pr. Alan &amp; Pra. Graciele Daniel</p>
-              </div>
-            </div>
-            <div className="rounded-2xl p-4 flex items-center gap-4"
-              style={{ background: "rgba(162,28,175,0.1)", border: "1px solid rgba(162,28,175,0.3)" }}>
-              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(162,28,175,0.4)" }}>
-                <Image
-                  src="/dj-pescadora.webp"
-                  alt="DJ Pescadora"
-                  width={64}
-                  height={64}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-fuchsia-400 mb-0.5">Louvor</p>
-                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
-                  style={{ fontFamily: "var(--font-playfair)" }}>
-                  Louvor e Festa
-                </h3>
-                <p className="text-xs text-gray-400">DJ Pescadora</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* ── Conteúdo — DESKTOP (md+): posicionado sobre a imagem cover ── */}
-        <div className="relative z-10 w-full max-w-lg mx-auto hidden md:flex flex-col items-center px-5"
-          style={{ paddingTop: "52svh", minHeight: "100svh" }}>
-
-          {/* Logo do evento */}
-          <div className="w-[80%] max-w-[420px] md:max-w-[500px] mx-auto mb-5">
-            <Image
-              src="/logodotitulo.png"
-              alt="Conferência de Casais 2026"
-              width={500}
-              height={250}
-              className="w-full h-auto object-contain"
-              priority
-              sizes="(max-width: 768px) 420px, 500px"
-            />
-          </div>
-
-          {/* Tema */}
-          <p
-            className="text-center text-base text-gray-300 mb-6 leading-relaxed"
-            style={{ fontFamily: "var(--font-cormorant)", fontSize: "clamp(16px, 4vw, 18px)" }}
-          >
-            <em>&quot;Casados e Aliançados: Um casamento com propósito.&quot;</em>
-          </p>
-
-          {/* ── Countdown ── */}
-          <div className="mb-6">
-            <p className="text-center text-xs uppercase tracking-[0.2em] text-gray-400 mb-3"
-              style={{ fontFamily: "var(--font-inter)" }}>
-              Contagem Regressiva
-            </p>
-            <Countdown />
-          </div>
-
-          {/* ── Info do Evento ── */}
-          <div className="w-full space-y-2.5 mb-7">
-            <div className="grid grid-cols-2 gap-2.5">
-              <div className="rounded-xl px-4 py-3"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Data</p>
-                <p className="text-sm font-semibold text-white">08 de Agosto</p>
-                <p className="text-xs text-gray-400">Sábado · 2026</p>
-              </div>
-              <div className="rounded-xl px-4 py-3"
-                style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-                <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Horário</p>
-                <p className="text-sm font-semibold text-white">18h00</p>
-                <p className="text-xs text-gray-400">Abertura dos portões</p>
-              </div>
-            </div>
-
-            <div className="rounded-xl px-4 py-3"
-              style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)" }}>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-0.5">Local</p>
-              <p className="text-sm font-semibold text-white">Qd 107 Norte, AL 110, Lt 6 — Palmas/TO</p>
-              <p className="text-xs text-gray-400">Ao lado do Shopping Capim Dourado</p>
-            </div>
-
-            <div className="rounded-xl px-4 py-3 relative overflow-hidden"
-              style={{
-                background: "rgba(251,191,36,0.07)",
-                border: "1px solid rgba(251,191,36,0.5)",
-                boxShadow: "0 0 18px rgba(251,191,36,0.15), inset 0 0 12px rgba(251,191,36,0.05)",
-              }}>
-              <p className="text-[10px] uppercase tracking-widest text-amber-400 mb-0.5">Contribuição</p>
-              <p className="text-sm font-semibold text-white">5 kg de alimentos não perecíveis</p>
-              <p className="text-xs text-amber-300/70">Por casal · leve e transforme vidas</p>
-            </div>
-          </div>
-
-          {/* ── Botão CTA (Encerrado) ── */}
-          <div
-            className="w-full text-center font-bold text-red-200 py-4 rounded-full mb-8 cursor-not-allowed select-none"
-            style={{
-              fontFamily: "var(--font-inter)",
-              fontSize: "1rem",
-              letterSpacing: "0.08em",
-              background: "rgba(225, 29, 72, 0.15)",
-              border: "1px solid rgba(225, 29, 72, 0.4)",
-              boxShadow: "0 0 20px rgba(225, 29, 72, 0.15)",
-            }}
-          >
-            🔒 INSCRIÇÕES ENCERRADAS
-          </div>
-
-          {/* ── Cards de Atrações ── */}
-          <div className="w-full flex flex-col gap-3 pb-14">
-            <div className="rounded-2xl p-4 flex items-center gap-4"
-              style={{ background: "rgba(124,58,237,0.1)", border: "1px solid rgba(124,58,237,0.3)" }}>
-              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(124,58,237,0.4)" }}>
-                <Image
-                  src="/casalfotoperfil.webp"
-                  alt="Pr. Alan e Pra. Graciele Daniel"
-                  width={64}
-                  height={64}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-purple-400 mb-0.5">Ministério</p>
-                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
-                  style={{ fontFamily: "var(--font-playfair)" }}>
-                  Um Casal Cheio da Graça
-                </h3>
-                <p className="text-xs text-gray-400">Pr. Alan &amp; Pra. Graciele Daniel</p>
-              </div>
-            </div>
-            <div className="rounded-2xl p-4 flex items-center gap-4"
-              style={{ background: "rgba(162,28,175,0.1)", border: "1px solid rgba(162,28,175,0.3)" }}>
-              <div className="shrink-0 w-16 h-16 rounded-xl overflow-hidden"
-                style={{ border: "1px solid rgba(162,28,175,0.4)" }}>
-                <Image
-                  src="/dj-pescadora.webp"
-                  alt="DJ Pescadora"
-                  width={64}
-                  height={64}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div>
-                <p className="text-[10px] uppercase tracking-widest text-fuchsia-400 mb-0.5">Louvor</p>
-                <h3 className="text-sm font-semibold text-white leading-snug mb-0.5"
-                  style={{ fontFamily: "var(--font-playfair)" }}>
-                  Louvor e Festa
-                </h3>
-                <p className="text-xs text-gray-400">DJ Pescadora</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </section>
-
-      {/* ══════════════════════════════
-          SEÇÃO: CONHEÇA O CASAL
-      ══════════════════════════════ */}
-      <section className="bg-zinc-950 w-full px-5 py-16 flex flex-col items-center">
-        <div className="w-full max-w-lg mx-auto">
-
-          {/* Divider decorativo */}
-          <div className="flex items-center gap-4 mb-8">
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-700/60 to-transparent" />
-            <span className="text-[10px] uppercase tracking-[0.25em] text-purple-400"
-              style={{ fontFamily: "var(--font-inter)" }}>
-              Pregadores Convidados
-            </span>
-            <div className="h-px flex-1 bg-gradient-to-r from-transparent via-purple-700/60 to-transparent" />
-          </div>
-
-          <h2
-            className="text-center mb-3 text-white"
-            style={{
-              fontFamily: "var(--font-playfair)",
-              fontSize: "clamp(26px, 7vw, 38px)",
-              fontWeight: 700,
-              lineHeight: 1.2,
-            }}
-          >
-            Um Casal Cheio da Graça
-          </h2>
-          <h3
-            className="text-center mb-8 text-gray-400"
-            style={{
-              fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(16px, 5vw, 20px)",
-              fontStyle: "italic",
-            }}
-          >
-            Pr. Alan Daniel &amp; Pra. Graciele Daniel
-          </h3>
+            Rifa
+            <br />
+            Solidária
+          </h1>
 
           <p
-            className="text-gray-300 leading-relaxed text-center mb-10"
-            style={{
-              fontFamily: "var(--font-cormorant)",
-              fontSize: "clamp(15px, 4.5vw, 19px)",
-              lineHeight: 1.8,
-            }}
+            className="mt-6 max-w-2xl text-xl font-light italic leading-snug text-white drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)] sm:text-2xl md:text-3xl"
+            style={{ fontFamily: "var(--font-cormorant)" }}
           >
-            <strong className="text-white font-semibold">Pastor Alan Daniel</strong> e{" "}
-            <strong className="text-white font-semibold">Pastora Graciele Daniel</strong> são líderes da
-            Igreja do Evangelho Quadrangular em Sorocaba (SP). Além de pastorear a congregação local,
-            Alan já serviu como coordenador regional do ministério de homens e Graciele como
-            coordenadora regional do ministério de adolescentes, funções que lhes conferem abrangência
-            ministerial em toda a região metropolitana de Sorocaba.
+            Uma cota. Uma corrente de fé por Joselete.
           </p>
 
-          {/* ── Dois YouTube Shorts ── */}
-          <div className="grid grid-cols-2 gap-4 mb-10">
-            <div
-              className="w-full rounded-2xl overflow-hidden"
-              style={{
-                aspectRatio: "9/16",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-              }}
-            >
-              <iframe
-                src="https://www.youtube.com/embed/fI_Jh6UboS0"
-                title="Um Casal Cheio da Graça"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                loading="lazy"
-              />
-            </div>
-            <div
-              className="w-full rounded-2xl overflow-hidden"
-              style={{
-                aspectRatio: "9/16",
-                border: "1px solid rgba(255,255,255,0.08)",
-                boxShadow: "0 8px 32px rgba(0,0,0,0.5)",
-              }}
-            >
-              <iframe
-                src="https://www.youtube.com/embed/TAxO_R3UTJQ"
-                title="Um Casal Cheio da Graça 2"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-                loading="lazy"
-              />
-            </div>
-          </div>
+          <p className="mt-6 max-w-md text-sm leading-relaxed text-gray-300 sm:text-base">
+            {TOTAL_NUMEROS} cotas concorrendo a uma canoa completa. Meta de{" "}
+            {formatarReal(META)} para o tratamento contra o câncer.
+          </p>
 
-          {/* CTA secundário (Encerrado) */}
-          <div
-            className="w-full text-center font-semibold text-red-200 py-4 rounded-full cursor-not-allowed select-none"
-            style={{
-              fontFamily: "var(--font-inter)",
-              fontSize: "0.9rem",
-              letterSpacing: "0.08em",
-              background: "rgba(225, 29, 72, 0.15)",
-              border: "1px solid rgba(225, 29, 72, 0.4)",
-              boxShadow: "0 0 20px rgba(225, 29, 72, 0.15)",
-            }}
+          <a
+            href="#numeros"
+            className="mt-9 rounded-xl bg-[#c1121f] px-8 py-4 font-semibold text-white shadow-lg shadow-black/40 transition-colors hover:bg-[#a50f1a]"
           >
-            🔒 INSCRIÇÕES ENCERRADAS
-          </div>
+            Escolher minha cota
+          </a>
         </div>
       </section>
 
-      {/* ══════════════════════════════
-          RODAPÉ
-      ══════════════════════════════ */}
-      <footer className="bg-black border-t border-white/5 py-10 px-5 flex flex-col items-center gap-5">
-        <Image
-          src="/logoigreja.png"
-          alt="Igreja Hope"
-          width={130}
-          height={65}
-          className="h-14 w-auto object-contain opacity-75"
-        />
-        <div className="h-px w-24 bg-white/10" />
-        <p
-          className="text-xs text-gray-600 text-center"
-          style={{ fontFamily: "var(--font-inter)", letterSpacing: "0.05em" }}
-        >
-          © 2026 Igreja Hope · Rede de Casais · Todos os direitos reservados
+      {/*
+        O PainelRifa é um Client Component (grade, modal e dados ao vivo).
+        As seções abaixo são estáticas, então vão como children e continuam
+        sendo renderizadas no servidor.
+      */}
+      <PainelRifa>
+        <section className="border-y border-white/5 bg-black/25">
+          <div className="mx-auto w-full max-w-5xl px-5 py-14 md:py-20">
+            <div className="grid gap-12 md:grid-cols-2">
+              <div>
+                <h2 className="mb-5 text-3xl font-bold text-white md:text-4xl">
+                  Sobre a <span className="text-[#d4af37]">causa</span>
+                </h2>
+                <div className="space-y-4 leading-relaxed text-gray-300">
+                  <p>
+                    A Joselete está enfrentando um tratamento contra o câncer, e
+                    os custos envolvidos vão muito além do que uma família
+                    consegue sustentar sozinha: consultas, exames, medicamentos e
+                    deslocamentos que não podem esperar.
+                  </p>
+                  <p>
+                    Foi daí que nasceu esta rifa. São {TOTAL_NUMEROS} cotas de{" "}
+                    {formatarReal(VALOR_COTA)}, com meta de {formatarReal(META)},
+                    e cada cota concorre à embarcação. Todo o valor arrecadado é
+                    destinado ao tratamento.
+                  </p>
+                  <p className="text-[#d4af37]">
+                    Participar é mais do que concorrer a um prêmio. É entrar numa
+                    corrente de fé por uma vida.
+                  </p>
+                </div>
+              </div>
+
+              <div>
+                <h2 className="mb-5 text-3xl font-bold text-white md:text-4xl">
+                  O <span className="text-[#d4af37]">prêmio</span>
+                </h2>
+                <p className="mb-6 leading-relaxed text-gray-300">
+                  Uma canoa em excelente estado de conservação, pronta para uso.
+                </p>
+
+                <ul className="space-y-3">
+                  {ESPECIFICACOES.map(({ icone: Icone, rotulo, valor }) => (
+                    <li
+                      key={rotulo}
+                      className="flex items-center gap-4 rounded-xl border border-white/10 bg-white/[0.03] px-5 py-4"
+                    >
+                      <Icone className="h-5 w-5 shrink-0 text-[#d4af37]" />
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.15em] text-gray-500">
+                          {rotulo}
+                        </p>
+                        <p className="font-semibold text-white">{valor}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* ─────────────── Galeria ─────────────── */}
+            <div className="mt-16">
+              <h2 className="mb-2 text-center text-3xl font-bold text-white md:text-4xl">
+                Conheça a <span className="text-[#d4af37]">embarcação</span>
+              </h2>
+              <p className="mx-auto mb-8 max-w-xl text-center text-gray-400">
+                Fotos reais do prêmio desta rifa.
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+                {GALERIA.map((foto, indice) => (
+                  <div
+                    key={foto.src}
+                    className="group relative aspect-4/3 overflow-hidden rounded-xl border border-white/10"
+                  >
+                    <Image
+                      src={foto.src}
+                      alt={foto.alt}
+                      fill
+                      loading={indice < 2 ? "eager" : "lazy"}
+                      sizes="(min-width: 768px) 33vw, 50vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </PainelRifa>
+
+      {/* ══════════════════════ RODAPÉ ══════════════════════ */}
+      <footer className="mt-auto border-t border-white/5 px-5 py-10 text-center">
+        <p className="text-sm text-gray-500">
+          Rifa Solidária por Joselete · Toda a arrecadação é destinada ao
+          tratamento.
         </p>
       </footer>
-
     </main>
   );
 }

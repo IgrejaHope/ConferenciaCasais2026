@@ -2,98 +2,92 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import Link from "next/link";
-import { Lock, ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2, Lock } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
 
-  const handleLogin = (e: React.FormEvent) => {
+  async function entrar(e: React.FormEvent) {
     e.preventDefault();
-    setError("");
-    setLoading(true);
+    setErro("");
+    setCarregando(true);
 
-    // Senha simples para controle de acesso (em produção ideal usar auth real)
-    setTimeout(() => {
-      if (password === "casais2026") {
-        // Salvar auth no sessionStorage apenas para a sessão
-        sessionStorage.setItem("admin_auth", "true");
-        router.push("/admin/dashboard");
-      } else {
-        setError("Senha incorreta");
-        setLoading(false);
+    try {
+      const resposta = await fetch("/api/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ senha }),
+      });
+
+      if (!resposta.ok) {
+        const corpo = await resposta.json().catch(() => ({}));
+        setErro(corpo.erro ?? "Não foi possível entrar.");
+        setCarregando(false);
+        return;
       }
-    }, 800);
-  };
+
+      router.replace("/admin/dashboard");
+      router.refresh();
+    } catch {
+      setErro("Falha de conexão. Tente novamente.");
+      setCarregando(false);
+    }
+  }
 
   return (
     <main
-      className="min-h-screen bg-black text-white flex flex-col items-center justify-center p-5"
+      className="flex min-h-screen flex-col items-center justify-center bg-[#1a1a1a] p-5 text-white"
       style={{ fontFamily: "var(--font-inter)" }}
     >
-      <div
-        className="fixed inset-0 z-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at 50% 50%, rgba(124,58,237,0.1) 0%, transparent 50%), #000",
-        }}
-      />
-
-      <div className="relative z-10 w-full max-w-sm flex flex-col items-center">
-        <Image
-          src="/logodotitulo.png"
-          alt="Conferência de Casais 2026"
-          width={200}
-          height={100}
-          className="w-[180px] h-auto object-contain mb-8"
-        />
-
-        <div className="w-full bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-md">
-          <div className="flex flex-col items-center mb-6">
-            <div className="w-12 h-12 rounded-full bg-purple-900/30 flex items-center justify-center mb-3 text-purple-400">
-              <Lock className="w-5 h-5" />
+      <div className="w-full max-w-sm">
+        <div className="rounded-2xl border border-[#d4af37]/25 bg-white/[0.03] p-6">
+          <div className="mb-6 flex flex-col items-center text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#c1121f]/20 text-[#d4af37]">
+              <Lock className="h-5 w-5" />
             </div>
             <h1 className="text-xl font-semibold">Acesso Restrito</h1>
-            <p className="text-sm text-gray-400 text-center mt-1">
-              Área administrativa da Conferência
+            <p className="mt-1 text-sm text-gray-400">
+              Painel da Rifa Solidária
             </p>
           </div>
 
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <input
-                type="password"
-                placeholder="Senha de acesso"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-center text-white placeholder:text-gray-600 focus:outline-none focus:border-purple-500 transition-colors"
-                autoFocus
-              />
-            </div>
-            
-            {error && (
-              <p className="text-red-400 text-sm text-center">{error}</p>
+          <form onSubmit={entrar} className="space-y-4">
+            <input
+              type="password"
+              placeholder="Senha de acesso"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+              autoComplete="current-password"
+              autoFocus
+              className="w-full rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-center text-white placeholder:text-gray-600 focus:border-[#d4af37] focus:outline-none transition-colors"
+            />
+
+            {erro && (
+              <p className="rounded-xl border border-[#c1121f]/40 bg-[#c1121f]/10 px-4 py-3 text-center text-sm text-red-300">
+                {erro}
+              </p>
             )}
 
             <button
               type="submit"
-              disabled={loading || !password}
-              className="w-full bg-white text-black font-semibold rounded-xl py-3 transition-colors hover:bg-gray-200 disabled:opacity-50"
+              disabled={carregando || !senha}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#c1121f] py-3 font-semibold text-white transition-colors hover:bg-[#a50f1a] disabled:opacity-50"
             >
-              {loading ? "Entrando..." : "Entrar"}
+              {carregando && <Loader2 className="h-4 w-4 animate-spin" />}
+              {carregando ? "Entrando..." : "Entrar"}
             </button>
           </form>
         </div>
 
         <Link
           href="/"
-          className="mt-8 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-white transition-colors"
+          className="mt-8 flex items-center justify-center gap-2 text-sm text-gray-500 transition-colors hover:text-white"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="h-4 w-4" />
           Voltar para o site
         </Link>
       </div>

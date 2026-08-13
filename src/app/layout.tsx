@@ -22,44 +22,30 @@ const inter = Inter({
   weight: ["300", "400", "500", "600"],
 });
 
+// TODO: trocar pela URL final do projeto na Vercel.
+const SITE_URL = "https://conferencia-casais2026.vercel.app";
+
+const TITULO = "Rifa Solidária · Uma corrente de fé por Joselete";
+const DESCRICAO =
+  "50 cotas de R$ 1.000,00 concorrendo a um barco. Toda a arrecadação é destinada ao tratamento de câncer da Joselete.";
+
 export const metadata: Metadata = {
-  metadataBase: new URL("https://conferencia-casais2026.vercel.app"),
-  title: "Conferência de Casais 2026 · Igreja Hope",
-  description: "Casados e Aliançados: Um casamento com propósito. Participe da nossa conferência no dia 08 de Agosto de 2026 em Palmas/TO. Inscreva-se gratuitamente.",
-  keywords: ["Casais", "Conferência", "Igreja Hope", "Casamento", "Palmas"],
-  authors: [{ name: "Igreja Hope" }],
-  icons: {
-    icon: "/logoigreja.png",
-    shortcut: "/logoigreja.png",
-    apple: "/logoigreja.png",
-  },
+  metadataBase: new URL(SITE_URL),
+  title: TITULO,
+  description: DESCRICAO,
+  keywords: ["Rifa", "Solidária", "Joselete", "Tratamento", "Câncer", "Barco"],
   openGraph: {
-    title: "Conferência de Casais 2026 · Casados & Aliançados",
-    description: "Um casamento com propósito. Junte-se a nós dia 08 de Agosto de 2026 com Pr. Alan e Pra. Graciele Daniel. Inscreva-se grátis!",
-    url: "https://conferencia-casais2026.vercel.app",
-    siteName: "Conferência de Casais 2026",
-    images: [
-      {
-        url: "/fotomaisfundopreto.jpg",
-        width: 1200,
-        height: 630,
-        alt: "Conferência de Casais 2026 - Casados e Aliançados",
-      },
-      {
-        url: "/casalfotoperfil.webp",
-        width: 800,
-        height: 800,
-        alt: "Pr. Alan & Pra. Graciele Daniel - Casal Cheio da Graça",
-      }
-    ],
+    title: TITULO,
+    description: DESCRICAO,
+    url: SITE_URL,
+    siteName: "Rifa Solidária por Joselete",
     locale: "pt_BR",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Conferência de Casais 2026 · Casados & Aliançados",
-    description: "Um casamento com propósito. Junte-se a nós dia 08 de Agosto de 2026. Inscreva-se grátis!",
-    images: ["/fotomaisfundopreto.jpg"],
+    title: TITULO,
+    description: DESCRICAO,
   },
 };
 
@@ -73,7 +59,9 @@ export default function RootLayout({
       lang="pt-BR"
       className={`${playfair.variable} ${cormorant.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-black">{children}</body>
+      <body className="min-h-full flex flex-col bg-[#1a1a1a] text-white">
+        {children}
+      </body>
     </html>
   );
 }
