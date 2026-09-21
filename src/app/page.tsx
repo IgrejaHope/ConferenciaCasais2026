@@ -65,6 +65,10 @@ export default function Home() {
           >
             Escolher minha cota
           </a>
+
+          <p className="mt-3 text-xs text-gray-300/90 sm:text-sm">
+            O sorteio ocorrerá mediante a venda total das cotas.
+          </p>
         </div>
       </section>
 
